@@ -30,7 +30,7 @@ export default function SubNav(){
     return (
         <>
         <ul className="list-none flex flex-row justify-center items-center space-x-4">
-        <Menu as='li'
+            <Menu as='li'
             className="relative cursor-pointer border-none">
                 {({open})=>(
                     <>
@@ -67,8 +67,7 @@ export default function SubNav(){
                 )}
             </Menu>
 
-
-        <Menu as='li'
+            <Menu as='li'
             className="relative cursor-pointer border-none">
                 {({open})=>(
                     <>
@@ -141,7 +140,6 @@ export default function SubNav(){
                     </>
                 )}
             </Menu>
-
             
         </ul>
         </>

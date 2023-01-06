@@ -9,7 +9,7 @@ export default function Houses(){
                 <div>
 
                     <table
-                    className="w-full border-separate [border-spacing:0.25rem] table-auto text-left">
+                    className="w-full border-separate [border-spacing:0.25rem] table-auto text-left border-2 rounded-md p-2">
                         <thead className='border-b'>
                             <tr className='text-sm'>
                                 <th>Type</th>

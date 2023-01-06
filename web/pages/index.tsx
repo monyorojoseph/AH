@@ -1,7 +1,6 @@
 import Layout from "../components/Layout/layout";
 import Image from 'next/image'
 import Link from "next/link";
-import { useSession } from "next-auth/react"
 
 import house from '../public/images/house.jpg'
 import location from '../public/images/location.jpg'
@@ -21,7 +20,6 @@ import { StarIcon } from '@heroicons/react/24/solid'
 
 
 export default function Home() {
-  const { data: session } = useSession()
   return (
     <Layout>
       <section className="container mx-auto">
@@ -92,7 +90,7 @@ export default function Home() {
               
           </div>
 
-          <div className="border rounded-md bg-slate-600 flex flex-row 
+          <div className="border rounded-md bg-slate-600 flex flex-col md:flex-row 
           text-white py-8 px-4 justify-evenly items-center text-lg font-bold">
             <h6>Get notified when apartment is vacant</h6>
             <Link href='/auth/login'><span className="border rounded-md px-5 py-1">Sign up</span></Link>
@@ -205,7 +203,7 @@ export default function Home() {
 
           </div>
 
-          <div className="border rounded-md bg-slate-600 flex flex-row 
+          <div className="border rounded-md bg-slate-600 flex flex-col md:flex-row 
           text-white py-8 px-4 justify-evenly items-center text-lg font-bold">
             <h6>Add apartment for listing</h6>
             <Link href='/auth/login'><span className="border rounded-md px-5 py-1">Sign up</span></Link>
