@@ -1,6 +1,8 @@
 import Layout from "../components/Layout/layout";
 import Image from 'next/image'
 import Link from "next/link";
+import { useSession } from "next-auth/react"
+
 import house from '../public/images/house.jpg'
 import location from '../public/images/location.jpg'
 
@@ -19,6 +21,7 @@ import { StarIcon } from '@heroicons/react/24/solid'
 
 
 export default function Home() {
+  const { data: session } = useSession()
   return (
     <Layout>
       <section className="container mx-auto">
@@ -28,8 +31,6 @@ export default function Home() {
           </div>
 
           <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">  
-
-
 
               <Link href="/apartment">
                 <div className="group rounded-md shadow-sm hover:border-black border">
@@ -50,9 +51,6 @@ export default function Home() {
                   </div>
                 </div>
               </Link>
-
-
-
               <Link href="/house">
                 <div className="group rounded-md shadow-sm hover:border-black border">
                   <div className="min-h-80 aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-t-md 
@@ -72,7 +70,6 @@ export default function Home() {
                   </div>
                 </div>
               </Link>
-
               <Link href="/located">
                 <div className="group rounded-md shadow-sm hover:border-black border">
                   <div className="min-h-80 aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-t-md 
@@ -95,12 +92,10 @@ export default function Home() {
               
           </div>
 
-          <div className="flex flex-row justify-center items-center">
-            <div className="border rounded-md bg-slate-600 w-2/3 flex flex-row 
-            text-white py-6 px-4 justify-between items-center">
-              <h6>Get notified when apartment is vacant</h6>
-              <button className="border rounded-md px-5 py-1">Sign up</button>
-            </div>
+          <div className="border rounded-md bg-slate-600 flex flex-row 
+          text-white py-8 px-4 justify-evenly items-center text-lg font-bold">
+            <h6>Get notified when apartment is vacant</h6>
+            <Link href='/auth/login'><span className="border rounded-md px-5 py-1">Sign up</span></Link>
           </div>
 
           <div className="space-y-5">
@@ -210,12 +205,10 @@ export default function Home() {
 
           </div>
 
-          <div className="flex flex-row justify-center items-center">
-            <div className="border rounded-md bg-purple-600 w-2/3 flex flex-row 
-            text-white py-6 px-4 justify-between items-center">
-              <h6>Add apartment for viewing</h6>
-              <button className="border rounded-md px-5 py-1">Sign up</button>
-            </div>
+          <div className="border rounded-md bg-slate-600 flex flex-row 
+          text-white py-8 px-4 justify-evenly items-center text-lg font-bold">
+            <h6>Add apartment for listing</h6>
+            <Link href='/auth/login'><span className="border rounded-md px-5 py-1">Sign up</span></Link>
           </div>
 
           <div className="space-y-3">
