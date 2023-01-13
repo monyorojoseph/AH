@@ -72,16 +72,16 @@ class Profile(models.Model):
     full_name = models.CharField(max_length=200, null=True)
 
     MANAGEMENT = 'Management'
-    USER = 'User'
+    TENANT = 'Tenant'
     AGENT = 'Agent'
 
     ROLES = [
         (MANAGEMENT, MANAGEMENT),
         (AGENT, AGENT),
-        (USER, USER)
+        (TENANT, TENANT)
     ]
 
-    role = models.CharField(max_length=15, choices=ROLES, default=USER)
+    role = models.CharField(max_length=15, choices=ROLES, default=TENANT)
     image = ProcessedImageField(upload_to='user',
                                            processors=[ResizeToFill(300, 250)],
                                            format='JPEG',
