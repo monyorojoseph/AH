@@ -29,7 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.gis',
 
     "user",
-    "apartment",
+    "property",
 
     'imagekit',
     'rest_framework',
@@ -144,9 +144,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = "static"
+# STATIC_ROOT = "static"
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / "staticfiles",
 ]
 
 MEDDIA_URL = "media/"

@@ -1,6 +1,6 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
-from django_lifecycle import LifecycleModel, hook, AFTER_CREATE
+from django_lifecycle import LifecycleModelMixin, hook, AFTER_CREATE
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 
@@ -29,7 +29,7 @@ class CustomUserManager(BaseUserManager):
         return user
 
 # custom user
-class CustomUser(AbstractBaseUser, LifecycleModel):
+class CustomUser(LifecycleModelMixin, AbstractBaseUser):
     email = models.EmailField(unique=True)
     joined = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
@@ -85,7 +85,7 @@ class Profile(models.Model):
     image = ProcessedImageField(upload_to='user',
                                            processors=[ResizeToFill(300, 250)],
                                            format='JPEG',
-                                           options={'quality': 60})
+                                           options={'quality': 100})
     
     def __str__(self) -> str:
         return self.full_name or str(self.user.email)
