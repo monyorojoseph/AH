@@ -68,7 +68,7 @@ export default function Home() {
                   </div>
                 </div>
               </Link>
-              <Link href="/located">
+              <Link href="/region">
                 <div className="group rounded-md shadow-sm hover:border-black border">
                   <div className="min-h-80 aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-t-md 
                   bg-gray-200 group-hover:opacity-75 lg:aspect-none lg:h-80">
@@ -79,9 +79,9 @@ export default function Home() {
                     />
                   </div>
                   <div className="mt-4 px-3 pb-3">
-                  <p className="text-lg font-bold text-center text-gray-900">Locations</p>
+                  <p className="text-lg font-bold text-center text-gray-900">Regions</p>
                     <div className="flex flex-row justify-between items-center">
-                      <p className="mt-1 text-sm text-gray-500">No of Locations</p>
+                      <p className="mt-1 text-sm text-gray-500">No of Regions</p>
                       <p className="mt-1 text-sm text-gray-500">No of agents</p>
                     </div>
                   </div>

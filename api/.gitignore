@@ -2,3 +2,9 @@ env/
 __pycache__/
 media/
 staticfiles/
+
+img/
+mombasa.py 
+users.py 
+nakuru.py 
+names.py

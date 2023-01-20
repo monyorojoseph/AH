@@ -10,10 +10,13 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
-    path('profile/', include('profile.urls')),
+
+    # my apps urls
+    path("property/", include('property.urls')),
+    path("user/", include('user.urls')),
 
     # documentation
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema',),
     path('docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]
 

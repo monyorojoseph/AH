@@ -1,9 +1,11 @@
 import { useRouter } from "next/router";
-import ListApartments from "../../components/ListingOptions/listing_apartments";
+import ListApartments from "../../components/Listing/Apartment/listing_apartments";
+import axios from 'axios';
+import { useEffect, useState } from "react";
 
 export default function ApartmentType(){
     const router = useRouter()
-    const extra = `${router.query['apt_type']} apartments`
-
-    return(<ListApartments extra={extra} location={false}/>)
+    const type = router.query['apt_type'] as string;
+    
+    return(<ListApartments type={type}/>)
 }

@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import status
+from drf_spectacular.utils import extend_schema, inline_serializer
 
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
@@ -17,6 +18,9 @@ class MyProfileAPI(APIView):
     permission_classes = [ IsAuthenticated ]
     authentication_classes = [ TokenAuthentication ]
 
+    @extend_schema(
+        responses=ProfileSerializer()
+    )
     def get(self, request, format=None):
         profile = get_object_or_404(Profile, user=request.user)
         serializer = ProfileSerializer(profile)

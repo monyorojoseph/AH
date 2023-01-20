@@ -1,8 +1,11 @@
 from django.contrib import admin
-from .models import Place, Apartment, House, Image
+from .models import Estate, Apartment, House, Image
 from django.contrib.gis.admin import OSMGeoAdmin
 
-admin.site.register(Place)
+@admin.register(Estate)
+class EstateAdmin(admin.ModelAdmin):
+    list_display = ['slug', 'region', 'name']
+
 admin.site.register(Image)
 
 @admin.register(House)

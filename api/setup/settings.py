@@ -59,6 +59,8 @@ REST_FRAMEWORK = {
         'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
+    # 'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+
 }
 
 
@@ -76,6 +78,7 @@ DJOSER = {
     # 'SEND_ACTIVATION_EMAIL': True,
     'LOGIN_FIELD': 'email',
     'SERIALIZERS': {},
+    'HIDE_USERS': True
 }
 
 ROOT_URLCONF = "setup.urls"
@@ -167,6 +170,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
+
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Apartment Hunting API',
     'DESCRIPTION': """An appication that let's people search for house or apartment for sale or rent
@@ -174,4 +178,7 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS
+    'PREPROCESSING_HOOKS': [
+        'setup.shared.hooks.custom_preprocessing_hook'
+    ],
 }

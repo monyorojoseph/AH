@@ -1,3 +1,4 @@
+import uuid
 from django.contrib.gis.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django_lifecycle import LifecycleModelMixin, hook, AFTER_CREATE
@@ -30,6 +31,7 @@ class CustomUserManager(BaseUserManager):
 
 # custom user
 class CustomUser(LifecycleModelMixin, AbstractBaseUser):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
     joined = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
@@ -42,6 +44,9 @@ class CustomUser(LifecycleModelMixin, AbstractBaseUser):
 
     def __str__(self):
         return self.email
+    
+    class Meta:
+        verbose_name_plural = "Users"
 
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
@@ -59,10 +64,10 @@ class CustomUser(LifecycleModelMixin, AbstractBaseUser):
         # Simplest possible answer: All admins are staff
         return self.is_admin
     
-    @hook(AFTER_CREATE)
-    def create_profile(self):
-        Profile.objects.create(user=self)
-        return
+    # @hook(AFTER_CREATE)
+    # def create_profile(self):
+    #     Profile.objects.create(user=self)
+    #     return
 
 
 # profile

@@ -1,32 +1,17 @@
 import { Menu, Transition } from "@headlessui/react"
 import { ChevronDownIcon } from "@heroicons/react/20/solid"
 import Link from "next/link"
+import { useFetchRegions } from "../../hooks/swr/estate"
+import { PropertyTypes, Region } from "../../shared/types"
+import { useFetchApartmentTypes, useFetchHouseTypes } from "../../hooks/swr/property"
 
-export const Locations = [
-    {label: "Westlands"},
-    {label: "Ruaka"},
-    {label: "Ruiru"},
-    {label: "Karen"},
-    {label: "Kilimani"},
-
-]
-
-export const Apartments = [
-    {label: "Studio"},
-    {label: "One bedroom"},
-    {label: "Two bedroom"},
-    {label: "Three bedroom"},
-
-]
-
-export const Houses = [
-    {label: "Two bedroom"},
-    {label: "Three bedroom"},
-    {label: "Four bedroom"},
-    {label: "Five bedroom"},
-]
 
 export default function SubNav(){
+    const { data: regions } = useFetchRegions();
+    const { data: apartments } = useFetchApartmentTypes()
+    const { data: houses } = useFetchHouseTypes()
+
+
     return (
         <>
         <ul className="list-none flex flex-row justify-center items-center space-x-4">
@@ -53,10 +38,10 @@ export default function SubNav(){
                                 className="absolute top-4 bg-white flex flex-col justify-center items-start space-y-3 py-3
                                 border rounded-md w-60">
                                     {
-                                        Apartments.map((apt)=>(
-                                            <Menu.Item key={apt.label}>
-                                                <Link href={`/apartment/${apt.label}`}>
-                                                    <span className="py-1 px-6">{apt.label}</span>
+                                        apartments?.types?.map((apt: PropertyTypes)=>(
+                                            <Menu.Item key={apt.key}>
+                                                <Link href={`/apartment/${apt.key}`}>
+                                                    <span className="py-1 px-6">{apt.key}</span>
                                                 </Link>
                                             </Menu.Item>
                                         ))
@@ -90,10 +75,10 @@ export default function SubNav(){
                                 className="absolute top-4 bg-white flex flex-col justify-center items-start space-y-3 py-3
                                 border rounded-md w-60">
                                     {
-                                        Houses.map((hse)=>(
-                                            <Menu.Item key={hse.label}>
-                                                <Link href={`/house/${hse.label}`}>
-                                                    <span className="py-1 px-6">{hse.label}</span>
+                                        houses?.types?.map((hse:PropertyTypes)=>(
+                                            <Menu.Item key={hse.key}>
+                                                <Link href={`/house/${hse.key}`}>
+                                                    <span className="py-1 px-6">{hse.key}</span>
                                                 </Link>
                                             </Menu.Item>
                                         ))
@@ -110,7 +95,7 @@ export default function SubNav(){
                     <>
                         <Menu.Button 
                         className='p-1 flex flex-row justify-center items-center space-x-1 border-none'>
-                            <span>Location</span>
+                            <span>Regions</span>
                             <span><ChevronDownIcon className={` h-5 w-5 ${open && "rotate-180 transform"}`} /></span>
                         </Menu.Button>
                         
@@ -127,10 +112,10 @@ export default function SubNav(){
                                 className="absolute top-4 bg-white flex flex-col justify-center items-start space-y-3 py-3
                                 border rounded-md">
                                     {
-                                        Locations.map((location)=>(
-                                            <Menu.Item key={location.label}>
-                                                <Link href={`/located/${location.label}`}>
-                                                    <span className="py-1 px-6">{location.label}</span>
+                                        regions?.map((region:Region)=>(
+                                            <Menu.Item key={region.region}>
+                                                <Link href={`/region/${region.region}`}>
+                                                    <span className="py-1 px-6">{region.region}</span>
                                                 </Link>
                                             </Menu.Item>
                                         ))
