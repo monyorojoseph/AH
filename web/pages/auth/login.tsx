@@ -1,14 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../components/Layout/layout";
-import { useSession, signIn } from "next-auth/react"
 import AuthForm from "../../components/Forms/auth_form";
+import { Credentials } from "../../shared/types";
+import { poster } from "../../shared/services";
 
 export default function Login() {
-    const { data: session } = useSession()
+    const [ data, setData ] = useState<Credentials>({
+        email: '',
+        password: ''
+    })
 
-    const handleSubmit = (e:React.SyntheticEvent)=> {
+    const handleSubmit = async(e:React.SyntheticEvent)=> {
         e.preventDefault()
-        signIn()
+        const resData = await poster('/auth/jwt/create/', data)
     }
 
     useEffect(()=> {
@@ -19,7 +23,8 @@ export default function Login() {
         <Layout>
             <section className="mx-auto container md:w-9/12 lg:w-7/12 my-10">
                 <div className="w-full md:w-6/12 mx-auto space-y-2">
-                    <AuthForm handleSubmit={handleSubmit} button_text='Sign In'/>
+                    <AuthForm data={data} setData={setData}
+                     handleSubmit={handleSubmit} button_text='Sign In'/>
                 </div>
             </section>
         </Layout>

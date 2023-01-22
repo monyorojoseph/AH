@@ -1,7 +1,8 @@
 import { GoogleMap, useJsApiLoader, MarkerF } from '@react-google-maps/api';
 import { SlimApartment } from '../../shared/types';
-import { useFetchApartment } from '../../hooks/swr/property';
-import { useState } from 'react';
+import { useFetchApartments } from '../../hooks/swr/property';
+import Error from '../States/error';
+import Loading from '../States/loading';
 
 const containerStyle = {
     width: '100%',
@@ -13,7 +14,7 @@ const center = {lat: -1.284100,lng: 36.815500};
 
 export default function ApartmentMapListing({queryParams}: {queryParams: string}){
 
-    const { next, results, previous, isLoading, error } = useFetchApartment(queryParams)
+    const { next, results, previous, isLoading, error } = useFetchApartments(queryParams)
     
     const api_key = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
     const { isLoaded } = useJsApiLoader({
@@ -21,11 +22,11 @@ export default function ApartmentMapListing({queryParams}: {queryParams: string}
     })
 
     if (!isLoaded || isLoading){
-        return <h6>Loading ...</h6>
+        return <Loading />
     }
 
     if ( error ) {
-        return <h6>Error occured somewhere</h6>
+        return <Error />
     }
 
     const setPosition = (lon: number, lat: number)=> {

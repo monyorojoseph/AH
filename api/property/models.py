@@ -1,5 +1,7 @@
 import uuid
 from django.contrib.gis.db import models
+from django.contrib.gis.db.models import *
+
 from django_lifecycle import LifecycleModelMixin, hook, AFTER_CREATE
 # from imagekit.models import ProcessedImageField
 # from imagekit.processors import ResizeToFill
@@ -33,6 +35,13 @@ class Base(LifecycleModelMixin, models.Model):
     class Meta:
         abstract = True
 
+
+class ApartmentManager(models.Manager):
+    def summary(self):
+        return self.values('type') \
+            .annotate(total=Count('id'), max=Max('price'), 
+            min=Min('price'), avg=Avg('price'), available=Sum('available_units'))
+
 class Apartment(Base):
     ONE_BEDROOM = 'One Bedroom'
     TWO_BEDROOM = 'Two Bedroom'
@@ -48,11 +57,22 @@ class Apartment(Base):
     type = models.CharField(max_length=50, choices=TYPES, default=STUDIO)
     name = models.CharField(max_length=200)
 
+    objects = ApartmentManager()
+
     class Meta:
         ordering = ['price']
 
     def __str__(self) -> str:
         return self.name
+    
+    def apartment_summary(self):
+        pass
+
+class HouseManager(models.Manager):
+    def summary(self):
+        return self.values('type') \
+            .annotate(total=Count('id'), max=Max('price'), 
+            min=Min('price'), avg=Avg('price'), available=Sum('available_units'))
 
 class House(Base):
     TWO_BEDROOM = 'Two Bedroom'
@@ -71,13 +91,33 @@ class House(Base):
     bathrooms = models.PositiveIntegerField(default=1)
     village = models.CharField(max_length=100)
 
+    objects = HouseManager()
+
     def __str__(self) -> str:
         return self.village
+
+    class Meta:
+        ordering = ['price']
+    
+    def house_summary(self):
+        pass
+
+class EstateManager(models.Manager):
+    def regions_total_estates(self):
+        return self.values('region').annotate(estates=Count('name'))
+
+    def regions_total_apartments(self):
+        return self.values('region').annotate(apartments=Count('estate_apartment'))
+
+    def regions_total_houses(self):
+        return self.values('region').annotate(houses=Count('estate_house'))
 
 class Estate(LifecycleModelMixin, models.Model):
     region = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, null=True, blank=True)
+
+    objects = EstateManager()
 
     def __str__(self) -> str:
         return f'{self.region} {self.name}'

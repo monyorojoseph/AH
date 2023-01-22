@@ -25,7 +25,7 @@ export default function Region(){
                 <div>
                     <div className="space-y-4">
                         { tab === PROPEERTIES[0] && <RegionListingApartments region={region}/>}
-                        { tab === PROPEERTIES[1] && <RegionListingHouses />}
+                        { tab === PROPEERTIES[1] && <RegionListingHouses region={region}/>}
                     </div>
                 </div>
             </div>

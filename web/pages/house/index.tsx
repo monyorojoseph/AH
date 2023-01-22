@@ -1,7 +1,17 @@
 import Link from "next/link";
 import Layout from "../../components/Layout/layout";
+import { fetcher } from "../../shared/services";
+import { PropertSummary } from "../../shared/types";
 
-export default function Houses(){
+
+export async function getStaticProps() {
+    const data = await fetcher('/property/houses-summary/')
+    return {
+      props: {data},
+    }
+  }
+  
+export default function Houses({data}:{data: Array<PropertSummary> |  null}){
     return (
         <Layout>
             <section className="w-9/12 mx-auto my-5 space-y-4">
@@ -21,48 +31,22 @@ export default function Houses(){
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <Link href='/apartment/Studio'>
-                                        <span
-                                        className="hover:font-bold">Two bedroom</span></Link>
-                                </td>
-                                <td>18, 000, 000</td>
-                                <td>8, 000, 000</td>
-                                <td>6, 000, 000</td>
-                                <td>8</td>
-                                <td>9</td>
-                            </tr>
-                            
-
-                            <tr>
-                                <td>Three bedroom</td>
-                                <td>35, 000, 000</td>
-                                <td>22, 000, 000</td>
-                                <td>15, 000, 000</td>
-                                <td>1</td>
-                                <td>7</td>
-                            </tr>
-
-
-                            <tr>
-                                <td>Four bedroom</td>
-                                <td>45, 000, 000</td>
-                                <td>32, 000, 000</td>
-                                <td>25, 000, 000</td>
-                                <td>2</td>
-                                <td>8</td>
-                            </tr>
-
-
-                            <tr>
-                                <td>Five bedroom</td>
-                                <td>55, 000, 000</td>
-                                <td>40, 000, 000</td>
-                                <td>35, 000, 000</td>
-                                <td>1</td>
-                                <td>5</td>
-                            </tr>
+                            {
+                                data?.map((house)=> (
+                                    <tr>
+                                        <td>
+                                            <Link href={`/house/${house.type}`}>
+                                                <span
+                                                className="text-slate-600 hover:text-black font-semibold">{house.type}</span></Link>
+                                        </td>
+                                        <td>{house.max}</td>
+                                        <td>{house.avg}</td>
+                                        <td>{house.min}</td>
+                                        <td>{house.available}</td>
+                                        <td>{house.total}</td>
+                                    </tr>
+                                ))
+                            }
                             
                             
                         </tbody>

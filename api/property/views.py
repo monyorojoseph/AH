@@ -19,6 +19,29 @@ from .serializers import *
 User = get_user_model()
 
 
+class HomeAPI(APIView):
+    @extend_schema(
+        responses=inline_serializer(
+            name='home',
+            fields= {
+                "total_apts": serializers.IntegerField(),
+                "total_hses": serializers.IntegerField(),
+                "total_regions": serializers.IntegerField()
+            }
+        )
+    )
+    def get(self, request, format=None):
+        apartments = Apartment.objects.all()
+        houses = House.objects.all()
+        regions = Estate.objects.distinct('region') 
+        context = {  
+            "total_apts": apartments.count(),
+            "total_hses": houses.count(),
+            "total_regions": regions.count(),
+        } 
+        return Response(context, status=status.HTTP_200_OK)
+
+
 """ Apartment API views """
 # list apartment types
 class ApartmentTypesAPI(APIView):
@@ -33,7 +56,7 @@ class ApartmentTypesAPI(APIView):
         )
     )
     def get(self, requesst, format=None):
-        data = {"types":[{"key": type[0]} for type in Apartment.TYPES]}
+        data = {"types":[{"label": type[0], 'value': type[0]} for type in Apartment.TYPES]}
         return Response(data, status=status.HTTP_200_OK)
 
 # list apartments
@@ -54,6 +77,15 @@ class ApartmentsAPI(APIView, CustomPageNumberPagination):
         results = self.paginate_queryset(filtered_queryset, request, view=self)
         serializer = SlimApartmentSerializer(results, many=True)
         return Response(self.get_paginated_response(serializer.data), status=status.HTTP_200_OK)
+
+class ApartmentsSummaryAPI(APIView):
+    @extend_schema(
+        responses=ApartmentManagerSerilaizer(many=True)
+    )
+    def get(self, request, format=None):
+        queryset =Apartment.objects.summary()
+        serializer = ApartmentManagerSerilaizer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 # apartment details
 class ApartmentAPI(APIView):
@@ -157,27 +189,45 @@ class HouseTypesAPI(APIView):
         )
     )
     def get(self, requesst, format=None):
-        data = {"types":[{"key": type[0]} for type in House.TYPES]}
+        data = {"types":[{"label": type[0], 'value': type[0]} for type in House.TYPES]}
         return Response(data, status=status.HTTP_200_OK)
 
 # list houses
-class HousesAPI(APIView):
+class HousesAPI(APIView, CustomPageNumberPagination):
+    pagination_class = CustomPageNumberPagination
+    filterset_fields = ['estate__slug', 'type', 'estate__region', 'bathrooms']
+    
     @extend_schema(
-        responses=HouseSerializer(many=True)
+        responses=SlimHouseSerializer(many=True)
     )
     def get(self, request, format=None):
-        queryset = House.objects.all()  # TODO add custom filteration
-        serializer = HouseSerializer(queryset, many=True)
+        queryset = House.objects.all()
+        ascend = "=-price" in request.get_full_path()
+        if ascend:
+            queryset = queryset.order_by('-price')
+        filter = CustomFilter()
+        filtered_queryset = filter.filter_queryset(request, queryset, self)
+        results = self.paginate_queryset(filtered_queryset, request, view=self)
+        serializer = SlimHouseSerializer(results, many=True)
+        return Response(self.get_paginated_response(serializer.data), status=status.HTTP_200_OK)
+
+class HousesSummaryAPI(APIView):
+    @extend_schema(
+        responses=HouseManagerSerilaizer(many=True)
+    )
+    def get(self, request, format=None):
+        queryset =House.objects.summary()
+        serializer = HouseManagerSerilaizer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 # house details
 class HouseAPI(APIView):
     @extend_schema(
-        responses=HouseSerializer()
+        responses=HouseDetailSerializer()
     )
     def get(self, request, id, format=None):
         house = get_object_or_404(House, id=id)
-        serializer = HouseSerializer(house)
+        serializer = HouseDetailSerializer(house)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 # list my house
@@ -185,11 +235,11 @@ class MyHousesAPI(APIView):
     permission_classes = [ IsAuthenticated ]
     authentication_classes = [ TokenAuthentication ]
     @extend_schema(
-        responses=HouseSerializer(many=True)
+        responses=SlimHouseSerializer(many=True)
     )
     def get(self, request, format=None):
         queryset = House.objects.filter(listed_by=request.user)
-        serializer = HouseSerializer(queryset, many=True)
+        serializer = SlimHouseSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 # add house
@@ -198,7 +248,7 @@ class AddHouseAPI(APIView):
     authentication_classes = [ TokenAuthentication ]
     @extend_schema(
         request=AddHouseSerializer(),
-        responses=HouseSerializer()
+        responses=HouseDetailSerializer()
     )
     def post(self, request, format=None):
         data = request.data
@@ -227,7 +277,7 @@ class UpdateHouseAPI(APIView):
     authentication_classes = [ TokenAuthentication ]
     @extend_schema(
         request=AddHouseSerializer(),
-        responses=HouseSerializer()
+        responses=HouseDetailSerializer()
     )
     def update(self, request, id, format=None):
         data = request.data

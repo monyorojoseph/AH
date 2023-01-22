@@ -2,6 +2,8 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
+    path("", HomeAPI.as_view(), name="home"),
+    
     # apartment
     path('apartment-types/', ApartmentTypesAPI.as_view(), name='apartment_types'),
     path('apartments/', ApartmentsAPI.as_view(), name='apartments'),
@@ -11,6 +13,8 @@ urlpatterns = [
     path('remove-apartment/<str:id>/', RemoveApartmentAPI.as_view(), name='remove_apartment'),
     path('update-apartment/<str:id>/', UpdateApartmentAPI.as_view(), name='update_apartment'),
     path('like-unlike-apartment/<str:id>/', LikeOrUnlikeApartmentAPI.as_view(), name='like_unlike_apartment'),
+    path('apartments-summary/', ApartmentsSummaryAPI.as_view(), name='apartments_summary'),
+
     
     # house
     path('house-types/', HouseTypesAPI.as_view(), name='house_types'),
@@ -21,6 +25,8 @@ urlpatterns = [
     path('remove-house/<str:id>/', RemoveHouseAPI.as_view(), name='remove_house'),
     path('update-house/<str:id>/', UpdateHouseAPI.as_view(), name='update_house'),
     path('like-unlike-house/<str:id>/', LikeOrUnlikeHouseAPI.as_view(), name='like_unlike_house'),
+    path('houses-summary/', HousesSummaryAPI.as_view(), name='houses_summary'),
+
     
     # estate
     path('estates/<str:region>/', EstatesAPI.as_view(), name='estates'),

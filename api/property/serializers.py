@@ -15,11 +15,44 @@ class AddHouseSerializer(serializers.Serializer):
     bathrooms = serializers.IntegerField()
     village = serializers.CharField()
 
+class SlimHouseSerializer(serializers.ModelSerializer):
+    cover_image = serializers.SerializerMethodField()
+    estate = serializers.SerializerMethodField()
+    lon = serializers.SerializerMethodField()
+    lat = serializers.SerializerMethodField()
+    class Meta:
+        model = House
+        fields = ['id', 'village', 'cover_image', 'price', 'estate', 'lat', 'lon']
 
-class HouseSerializer(serializers.ModelSerializer):
+    def get_estate(self, obj):
+        return obj.estate.name
+
+    def get_cover_image(self, obj):
+        image = ImageSerializer(obj.house_images.first()).data['image']
+        return image
+
+    def get_lon(self, obj):
+        return obj.location[0]
+
+    def get_lat(self, obj):
+        return obj.location[1]
+
+class HouseDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = House
         fields = "__all__"
+
+class HouseManagerSerilaizer(serializers.ModelSerializer):
+    type = serializers.CharField()
+    max = serializers.IntegerField()
+    min  = serializers.IntegerField()
+    avg  = serializers.IntegerField()
+    total  = serializers.IntegerField()
+    available = serializers.IntegerField()
+    class Meta:
+        model = House
+        fields = ['type', 'max', 'min', 'avg', 'total', 'available']
+
 
 class AddApartmentSerializer(serializers.Serializer):
     latitude = serializers.FloatField()
@@ -62,6 +95,17 @@ class ApartmentDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Apartment
         fields = "__all__"
+
+class ApartmentManagerSerilaizer(serializers.ModelSerializer):
+    type = serializers.CharField()
+    max = serializers.IntegerField()
+    min  = serializers.IntegerField()
+    avg  = serializers.IntegerField()
+    total  = serializers.IntegerField()
+    available = serializers.IntegerField()
+    class Meta:
+        model = Apartment
+        fields = ['type', 'max', 'min', 'avg', 'total', 'available']
 
 class AddImageSerializer(serializers.Serializer):
     image = serializers.ImageField()

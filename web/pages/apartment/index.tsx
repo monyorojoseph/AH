@@ -1,7 +1,18 @@
 import Link from "next/link";
 import Layout from "../../components/Layout/layout";
+import { fetcher } from "../../shared/services";
+import { PropertSummary } from "../../shared/types";
 
-export default function Apartments(){
+export async function getStaticProps() {
+    const data = await fetcher('/property/apartments-summary/')
+    return {
+      props: {
+        data,
+      },
+    }
+  }
+
+export default function Apartments({data}: {data: Array<PropertSummary> | null}){
     return (
         <Layout>
             <section className="w-9/12 mx-auto my-5 space-y-4">
@@ -21,49 +32,22 @@ export default function Apartments(){
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <Link href='/apartment/Studio'>
-                                        <span
-                                        className="hover:font-bold">Studio</span></Link>
-                                </td>
-                                <td>18, 000</td>
-                                <td>8, 000</td>
-                                <td>6, 000</td>
-                                <td>8</td>
-                                <td>19</td>
-                            </tr>
-                            
-
-                            <tr>
-                                <td>One bedroom</td>
-                                <td>35, 000</td>
-                                <td>22, 000</td>
-                                <td>15, 000</td>
-                                <td>12</td>
-                                <td>47</td>
-                            </tr>
-
-
-                            <tr>
-                                <td>Two bedroom</td>
-                                <td>45, 000</td>
-                                <td>32, 000</td>
-                                <td>25, 000</td>
-                                <td>20</td>
-                                <td>89</td>
-                            </tr>
-
-
-                            <tr>
-                                <td>Three bedroom</td>
-                                <td>55, 000</td>
-                                <td>40, 000</td>
-                                <td>35, 000</td>
-                                <td>10</td>
-                                <td>59</td>
-                            </tr>
-                            
+                            {
+                                data?.map((apartment)=> (
+                                    <tr>
+                                        <td>
+                                            <Link href={`/apartment/${apartment.type}`}>
+                                                <span
+                                                className="text-slate-600 hover:text-black font-semibold">{apartment.type}</span></Link>
+                                        </td>
+                                        <td>{apartment.max}</td>
+                                        <td>{apartment.avg}</td>
+                                        <td>{apartment.min}</td>
+                                        <td>{apartment.available}</td>
+                                        <td>{apartment.total}</td>
+                                    </tr>  
+                                ))
+                            }                         
                             
                         </tbody>
                     </table>

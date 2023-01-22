@@ -31,9 +31,9 @@ export default function ListApartments({type}:props){
             <section className="container mx-auto">
                 <div className="lg:w-10/12 lg:mx-auto my-5 space-y-4">
                     <h6 className="text-center text-lg font-bold">{type} apartments</h6>
-                    <TabFilter tab={tab} setTab={setTab} tabs={UI_TYPES} />
                     <div className="space-y-4">
                         <div className="flex flex-row justify-start items-center space-x-3">
+                            <TabFilter tab={tab} setTab={setTab} tabs={UI_TYPES} />
                             <MenuFilter qn='pricing' items={PRICING} name="Pricing" />
                         </div>
 

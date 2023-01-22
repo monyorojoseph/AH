@@ -2,7 +2,9 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import Axios from "axios";
 
-Axios.defaults.baseURL = 'http://localhost:8000'
+Axios.defaults.baseURL = 'http://127.0.0.1:8000'
+Axios.defaults.headers.common['Authorization'] = '';
+Axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 export default function App({ Component, pageProps }: AppProps) {
   return <Component {...pageProps} />

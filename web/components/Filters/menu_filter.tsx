@@ -21,6 +21,9 @@ export default function MenuFilter({name, items, qn}:{
         if(qn==='estate__slug' && value){
             router.push({ query: { ...router.query, 'estate__slug': value } }, undefined, { shallow: true });
         }
+        if(qn==='bathrooms' && value){
+            router.push({ query: { ...router.query, 'bathrooms': value } }, undefined, { shallow: true });
+        }
     }, [item])
     return (
             <Menu as='div'
@@ -29,7 +32,7 @@ export default function MenuFilter({name, items, qn}:{
                     <>
                         <Menu.Button 
                         className='p-1 flex flex-row justify-center items-center space-x-1 border rounded-md px-3 py-1 hover:border-black'>
-                            <span>{name}</span>
+                            <span>{item?.label ? item.label : name}</span>
                             <span><ChevronDownIcon className={` h-5 w-5 ${open && "rotate-180 transform"}`} /></span>
                         </Menu.Button>
                         

@@ -2,7 +2,7 @@ import { Menu, Transition } from "@headlessui/react"
 import { ChevronDownIcon } from "@heroicons/react/20/solid"
 import Link from "next/link"
 import { useFetchRegions } from "../../hooks/swr/estate"
-import { PropertyTypes, Region } from "../../shared/types"
+import { Item, Region } from "../../shared/types"
 import { useFetchApartmentTypes, useFetchHouseTypes } from "../../hooks/swr/property"
 
 
@@ -35,17 +35,19 @@ export default function SubNav(){
                                 leaveTo="transform scale-95 opacity-0"
                             >
                                 <Menu.Items static as='section' 
-                                className="absolute top-4 bg-white flex flex-col justify-center items-start space-y-3 py-3
-                                border rounded-md w-60">
-                                    {
-                                        apartments?.types?.map((apt: PropertyTypes)=>(
-                                            <Menu.Item key={apt.key}>
-                                                <Link href={`/apartment/${apt.key}`}>
-                                                    <span className="py-1 px-6">{apt.key}</span>
-                                                </Link>
-                                            </Menu.Item>
-                                        ))
-                                    }
+                                className="absolute">
+                                    <div className="relative top-4 bg-white flex flex-col justify-center items-start space-y-3 py-3
+                                    border rounded-md w-60">
+                                        {
+                                            apartments?.types?.map((apt: Item)=>(
+                                                <Menu.Item key={apt.value}>
+                                                    <Link href={`/apartment/${apt.value}`}>
+                                                        <span className="py-1 px-6">{apt.label}</span>
+                                                    </Link>
+                                                </Menu.Item>
+                                            ))
+                                        }
+                                    </div>
                                 </Menu.Items>
                             </Transition>
                     </>
@@ -72,17 +74,20 @@ export default function SubNav(){
                                 leaveTo="transform scale-95 opacity-0"
                             >
                                 <Menu.Items static as='section' 
-                                className="absolute top-4 bg-white flex flex-col justify-center items-start space-y-3 py-3
-                                border rounded-md w-60">
-                                    {
-                                        houses?.types?.map((hse:PropertyTypes)=>(
-                                            <Menu.Item key={hse.key}>
-                                                <Link href={`/house/${hse.key}`}>
-                                                    <span className="py-1 px-6">{hse.key}</span>
-                                                </Link>
-                                            </Menu.Item>
-                                        ))
-                                    }
+                                className="absolute ">
+                                    <div
+                                    className="relative top-4 bg-white flex flex-col justify-center items-start space-y-3 py-3
+                                    border rounded-md w-60">
+                                        {
+                                            houses?.types?.map((hse:Item)=>(
+                                                <Menu.Item key={hse.value}>
+                                                    <Link href={`/house/${hse.value}`}>
+                                                        <span className="py-1 px-6">{hse.label}</span>
+                                                    </Link>
+                                                </Menu.Item>
+                                            ))
+                                        }
+                                    </div>
                                 </Menu.Items>
                             </Transition>
                     </>
@@ -109,17 +114,20 @@ export default function SubNav(){
                                 leaveTo="transform scale-95 opacity-0"
                             >
                                 <Menu.Items static as='section' 
-                                className="absolute top-4 bg-white flex flex-col justify-center items-start space-y-3 py-3
-                                border rounded-md">
-                                    {
-                                        regions?.map((region:Region)=>(
-                                            <Menu.Item key={region.region}>
-                                                <Link href={`/region/${region.region}`}>
-                                                    <span className="py-1 px-6">{region.region}</span>
-                                                </Link>
-                                            </Menu.Item>
-                                        ))
-                                    }
+                                className="absolute">
+                                    <div
+                                    className="relative top-4 bg-white flex flex-col justify-center items-start space-y-3 py-3
+                                    border rounded-md">
+                                        {
+                                            regions?.map((region:Region)=>(
+                                                <Menu.Item key={region.region}>
+                                                    <Link href={`/region/${region.region}`}>
+                                                        <span className="py-1 px-6">{region.region}</span>
+                                                    </Link>
+                                                </Menu.Item>
+                                            ))
+                                        }
+                                    </div>
                                 </Menu.Items>
                             </Transition>
                     </>
